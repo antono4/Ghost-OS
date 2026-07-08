@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost OS - Full Computer-Use for AI Agents</title>
+    <meta name="description" content="One install, and any AI agent can see and operate every app on your Mac. Native macOS. No screenshots required.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --bg-card-hover: #222230;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6a6a7a;
+            --accent-green: #6ee7a8;
+            --accent-green-dark: #34d48c;
+            --accent-green-glow: rgba(110, 231, 168, 0.3);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color-hover: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Gradient Background */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(110, 231, 168, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(52, 212, 140, 0.08), transparent),
+                var(--bg-primary);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .nav-logo span {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links .btn-nav {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .nav-links .btn-nav:hover {
+            background: var(--accent-green-dark);
+            color: var(--bg-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 80px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--accent-green-glow);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-color-hover);
+        }
+
+        /* Ghost Logo */
+        .ghost-logo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 48px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .ghost-logo svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 40px var(--accent-green-glow));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header h2 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-color-hover);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-green-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-card-hover);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .comparison-table th:first-child {
+            text-align: left;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .check {
+            color: var(--accent-green);
+            font-size: 18px;
+        }
+
+        .comparison-table .cross {
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        .comparison-table .partial {
+            color: #fbbf24;
+            font-size: 14px;
+        }
+
+        /* Tools Section */
+        .tools {
+            padding: 100px 0;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .tool-category h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tool-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        .tool-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .tool-name {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 13px;
+            color: var(--accent-green);
+            font-weight: 500;
+            min-width: 140px;
+        }
+
+        .tool-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Installation Section */
+        .installation {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+
+        .install-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .install-step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-green);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: var(--text-primary);
+        }
+
+        .code-block .comment {
+            color: var(--text-muted);
+        }
+
+        .code-block .command {
+            color: var(--accent-green);
+        }
+
+        /* Related Projects */
+        .related {
+            padding: 100px 0;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .related-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+            display: flex;
+            gap: 24px;
+        }
+
+        .related-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-color-hover);
+            transform: translateY(-4px);
+        }
+
+        .related-logo {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .related-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .related-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .related-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .related-tagline {
+            font-size: 13px;
+            color: var(--accent-green);
+            font-style: italic;
+            margin-top: 12px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 0 60px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .section-header h2 {
+                font-size: 32px;
+            }
+
+            .comparison-table {
+                font-size: 12px;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px 8px;
+            }
+
+            .tool-name {
+                min-width: 120px;
+                font-size: 12px;
+            }
+
+            .tool-desc {
+                font-size: 12px;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="nav-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+                    <defs>
+                        <linearGradient id="ghostBodyNav" x1="0.5" y1="0" x2="0.5" y2="1">
+                            <stop offset="0%" stop-color="#6ee7a8"/>
+                            <stop offset="100%" stop-color="#34d48c"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M 256 52 C 160 52, 100 130, 100 230 L 100 380 C 100 395, 112 405, 122 395 C 135 382, 148 398, 160 405 C 175 414, 185 395, 198 390 C 210 386, 218 404, 232 408 C 244 412, 250 398, 256 394 C 262 398, 268 412, 280 408 C 294 404, 302 386, 314 390 C 327 395, 337 414, 352 405 C 364 398, 377 382, 390 395 C 400 405, 412 395, 412 380 L 412 230 C 412 130, 352 52, 256 52 Z" fill="url(#ghostBodyNav)" stroke="#1fa86e" stroke-width="3"/>
+                    <ellipse cx="210" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                    <circle cx="222" cy="213" r="11" fill="white" opacity="0.9"/>
+                    <ellipse cx="302" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                    <circle cx="314" cy="213" r="11" fill="white" opacity="0.9"/>
+                    <ellipse cx="256" cy="300" rx="28" ry="22" fill="#1a1a2e"/>
+                    <ellipse cx="256" cy="312" rx="15" ry="10" fill="#1fa86e" opacity="0.7"/>
+                    <circle cx="175" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                    <circle cx="337" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                </svg>
+                <span>Ghost OS</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#tools">Tools</a>
+                <a href="#comparison">Comparison</a>
+                <a href="#install">Install</a>
+                <a href="https://github.com/ghostwright/ghost-os" class="btn-nav">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="ghost-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+                    <defs>
+                        <linearGradient id="ghostBodyHero" x1="0.5" y1="0" x2="0.5" y2="1">
+                            <stop offset="0%" stop-color="#6ee7a8"/>
+                            <stop offset="100%" stop-color="#34d48c"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M 256 52 C 160 52, 100 130, 100 230 L 100 380 C 100 395, 112 405, 122 395 C 135 382, 148 398, 160 405 C 175 414, 185 395, 198 390 C 210 386, 218 404, 232 408 C 244 412, 250 398, 256 394 C 262 398, 268 412, 280 408 C 294 404, 302 386, 314 390 C 327 395, 337 414, 352 405 C 364 398, 377 382, 390 395 C 400 405, 412 395, 412 380 L 412 230 C 412 130, 352 52, 256 52 Z" fill="url(#ghostBodyHero)" stroke="#1fa86e" stroke-width="3"/>
+                    <ellipse cx="210" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                    <circle cx="222" cy="213" r="11" fill="white" opacity="0.9"/>
+                    <ellipse cx="302" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                    <circle cx="314" cy="213" r="11" fill="white" opacity="0.9"/>
+                    <ellipse cx="256" cy="300" rx="28" ry="22" fill="#1a1a2e"/>
+                    <ellipse cx="256" cy="312" rx="15" ry="10" fill="#1fa86e" opacity="0.7"/>
+                    <circle cx="175" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                    <circle cx="337" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                </svg>
+            </div>
+            <div class="hero-badge">
+                <span class="dot"></span>
+                v2.2.1 — March 2026
+            </div>
+            <h1>Ghost OS</h1>
+            <p>Your AI agent can write code, run tests, search files. But it can't click a button, send an email, or fill out a form. Ghost OS changes that.</p>
+            <div class="hero-cta">
+                <a href="#install" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    Get Started
+                </a>
+                <a href="https://github.com/ghostwright/ghost-os" class="btn-secondary" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Why Ghost OS?</h2>
+                <p>Other computer-use tools take screenshots and guess what's on screen. Ghost OS reads the macOS accessibility tree.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Self-Learning</h3>
+                    <p>A frontier model figures out the workflow once. A small model runs it forever. Show Ghost OS how to do something once, and it remembers forever.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">📖</div>
+                    <h3>Transparent</h3>
+                    <p>Recipes are JSON. Read every step before running. No black box. Know exactly what your AI is doing on your Mac.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🖥️</div>
+                    <h3>Native</h3>
+                    <p>Accessibility tree first. Vision fallback when needed. Structured data over pixel guessing. Works with any macOS app.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Any App</h3>
+                    <p>Not just browsers. Slack, Finder, Messages — anything on your Mac. Native macOS apps with full functionality.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Local</h3>
+                    <p>Your data never leaves your machine. Run locally with a local vision model. Privacy-first design.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Open</h3>
+                    <p>MCP protocol. Works with Claude Code, Cursor, VS Code, or any MCP client. Open source under MIT license.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison" id="comparison">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>How We Compare</h2>
+                <p>See how Ghost OS stacks up against other computer-use solutions.</p>
+            </div>
+            <div class="table-wrapper fade-in" style="overflow-x: auto;">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Ghost OS</th>
+                            <th>Anthropic Computer Use</th>
+                            <th>OpenAI Operator</th>
+                            <th>OpenClaw</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>👀 Accessibility Tree</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>🖥️ Native Apps</td>
+                            <td class="check">✓</td>
+                            <td class="partial">Limited</td>
+                            <td class="cross">Browser only</td>
+                            <td class="cross">Browser only</td>
+                        </tr>
+                        <tr>
+                            <td>🧠 Learns Workflows</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>🔒 Data Stays Local</td>
+                            <td class="check">✓</td>
+                            <td class="partial">Depends</td>
+                            <td class="cross">Cloud</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>📖 Open Source</td>
+                            <td class="check">✓ MIT</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="check">✓ MIT</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools" id="tools">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>29 Tools</h2>
+                <p>Everything your AI agent needs to see and operate your Mac.</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-category fade-in">
+                    <h3>🔍 Perception</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_context</span>
+                            <span class="tool-desc">Get current app, window, URL, focused element, and all interactive elements</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_state</span>
+                            <span class="tool-desc">List every running app with windows, positions, and sizes</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_find</span>
+                            <span class="tool-desc">Search for elements by name, role, DOM id, or CSS class</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_read</span>
+                            <span class="tool-desc">Extract text content from any app</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_inspect</span>
+                            <span class="tool-desc">Get complete metadata for one element</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_element_at</span>
+                            <span class="tool-desc">Identify what element is at a specific screen coordinate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tool-category fade-in">
+                    <h3>📸 Vision</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_screenshot</span>
+                            <span class="tool-desc">Capture a window screenshot for visual debugging</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_annotate</span>
+                            <span class="tool-desc">Screenshot with numbered labels on interactive elements</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_ground</span>
+                            <span class="tool-desc">Find element coordinates using vision (ShowUI-2B)</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_parse_screen</span>
+                            <span class="tool-desc">Detect all interactive elements via vision</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tool-category fade-in">
+                    <h3>🎯 Actions</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_click</span>
+                            <span class="tool-desc">Click an element by name, DOM id, or coordinates</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_hover</span>
+                            <span class="tool-desc">Move cursor to trigger tooltips and hover effects</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_long_press</span>
+                            <span class="tool-desc">Press and hold for context menus and drag initiation</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_drag</span>
+                            <span class="tool-desc">Drag from one point to another</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_scroll</span>
+                            <span class="tool-desc">Scroll up, down, left, or right in any app</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tool-category fade-in">
+                    <h3>⌨️ Input</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_type</span>
+                            <span class="tool-desc">Type text into a specific field</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_press</span>
+                            <span class="tool-desc">Press a single key like Return, Tab, Escape</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_hotkey</span>
+                            <span class="tool-desc">Press key combinations like Cmd+L, Cmd+Return</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tool-category fade-in">
+                    <h3>🪟 Windows</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_focus</span>
+                            <span class="tool-desc">Bring any app or specific window to the front</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_window</span>
+                            <span class="tool-desc">Minimize, maximize, close, move, or resize windows</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_wait</span>
+                            <span class="tool-desc">Wait for URL, element, or title changes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tool-category fade-in">
+                    <h3>🎓 Recipes</h3>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_recipes</span>
+                            <span class="tool-desc">List all installed recipes with descriptions</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_run</span>
+                            <span class="tool-desc">Execute a recipe with parameter substitution</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_recipe_show</span>
+                            <span class="tool-desc">View full steps and configuration of a recipe</span>
+                        </div>
+                        <div class="tool-item">
+                            <span class="tool-name">ghost_learn_*</span>
+                            <span class="tool-desc">Start/stop/status learning mode for workflow capture</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="installation" id="install">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Get Started</h2>
+                <p>Install Ghost OS in under a minute.</p>
+            </div>
+            <div class="install-steps fade-in">
+                <div class="install-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Install via Homebrew</h3>
+                        <p>Run the following command in your terminal:</p>
+                        <div class="code-block">
+                            <code><span class="command">brew install ghostwright/ghost-os/ghost-os</span></code>
+                        </div>
+                    </div>
+                </div>
+                <div class="install-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Run Setup</h3>
+                        <p>This handles permissions, MCP configuration, and vision model setup:</p>
+                        <div class="code-block">
+                            <code><span class="command">ghost setup</span></code>
+                        </div>
+                    </div>
+                </div>
+                <div class="install-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>That's It!</h3>
+                        <p>Your AI agent can now see and operate every app on your Mac. Works with Claude Code, Cursor, VS Code, or any MCP client.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fade-in" style="margin-top: 48px; text-align: center;">
+                <p style="color: var(--text-muted); font-size: 14px;">
+                    Requires macOS 14+ and Swift 6.2+
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Projects Section -->
+    <section class="related">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2>Meet the Family</h2>
+                <p>Other projects from ghostwright that work great with Ghost OS.</p>
+            </div>
+            <div class="related-grid">
+                <a href="https://github.com/ghostwright/specter" class="related-card fade-in" target="_blank">
+                    <div class="related-logo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+                            <defs>
+                                <linearGradient id="specterBody" x1="0.5" y1="0" x2="0.5" y2="1">
+                                    <stop offset="0%" stop-color="#c4b5fd"/>
+                                    <stop offset="100%" stop-color="#a78bfa"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M 256 52 C 160 52, 100 130, 100 230 L 100 380 C 100 395, 112 405, 122 395 C 135 382, 148 398, 160 405 C 175 414, 185 395, 198 390 C 210 386, 218 404, 232 408 C 244 412, 250 398, 256 394 C 262 398, 268 412, 280 408 C 294 404, 302 386, 314 390 C 327 395, 337 414, 352 405 C 364 398, 377 382, 390 395 C 400 405, 412 395, 412 380 L 412 230 C 412 130, 352 52, 256 52 Z" fill="url(#specterBody)" stroke="#8b5cf6" stroke-width="3"/>
+                            <ellipse cx="210" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                            <circle cx="222" cy="213" r="11" fill="white" opacity="0.9"/>
+                            <ellipse cx="302" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                            <circle cx="314" cy="213" r="11" fill="white" opacity="0.9"/>
+                            <ellipse cx="256" cy="300" rx="28" ry="22" fill="#1a1a2e"/>
+                            <ellipse cx="256" cy="312" rx="15" ry="10" fill="#8b5cf6" opacity="0.7"/>
+                            <circle cx="175" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                            <circle cx="337" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                        </svg>
+                    </div>
+                    <div class="related-content">
+                        <h3>Specter</h3>
+                        <p>Deploy persistent AI agents to dedicated VMs in 90 seconds. Automatic DNS, TLS, systemd hardening. Interactive TUI dashboard. You own the infrastructure.</p>
+                        <p class="related-tagline">AI agents that earn your trust.</p>
+                    </div>
+                </a>
+                <a href="https://github.com/ghostwright/shadow" class="related-card fade-in" target="_blank">
+                    <div class="related-logo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+                            <defs>
+                                <linearGradient id="shadowBody" x1="0.5" y1="0" x2="0.5" y2="1">
+                                    <stop offset="0%" stop-color="#fbbf24"/>
+                                    <stop offset="100%" stop-color="#f59e0b"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M 256 52 C 160 52, 100 130, 100 230 L 100 380 C 100 395, 112 405, 122 395 C 135 382, 148 398, 160 405 C 175 414, 185 395, 198 390 C 210 386, 218 404, 232 408 C 244 412, 250 398, 256 394 C 262 398, 268 412, 280 408 C 294 404, 302 386, 314 390 C 327 395, 337 414, 352 405 C 364 398, 377 382, 390 395 C 400 405, 412 395, 412 380 L 412 230 C 412 130, 352 52, 256 52 Z" fill="url(#shadowBody)" stroke="#d97706" stroke-width="3"/>
+                            <ellipse cx="210" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                            <circle cx="222" cy="213" r="11" fill="white" opacity="0.9"/>
+                            <ellipse cx="302" cy="225" rx="32" ry="38" fill="#1a1a2e"/>
+                            <circle cx="314" cy="213" r="11" fill="white" opacity="0.9"/>
+                            <ellipse cx="256" cy="300" rx="28" ry="22" fill="#1a1a2e"/>
+                            <ellipse cx="256" cy="312" rx="15" ry="10" fill="#d97706" opacity="0.7"/>
+                            <circle cx="175" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                            <circle cx="337" cy="265" r="24" fill="#f08070" opacity="0.4"/>
+                        </svg>
+                    </div>
+                    <div class="related-content">
+                        <h3>Shadow</h3>
+                        <p>Shadow is the other half of the story. Ghost OS gives AI agents eyes and hands on your Mac. Shadow gives them memory and intelligence.</p>
+                        <p class="related-tagline">Your computer was paying attention the whole time.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://github.com/ghostwright/ghost-os" target="_blank">GitHub</a>
+                    <a href="https://ghostwright.dev/ghost-os" target="_blank">Website</a>
+                    <a href="https://github.com/ghostwright/ghost-os/discussions" target="_blank">Discussions</a>
+                    <a href="https://modelcontextprotocol.io" target="_blank">MCP Protocol</a>
+                </div>
+                <p class="footer-copy">
+                    Ghost OS © 2026 ghostwright. MIT License.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
