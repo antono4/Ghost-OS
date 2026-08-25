@@ -1,2 +1,26 @@
-Last updated: 2026-08-25 22:04:20 WIB
-Last updated: 2026-08-25 22:21:40 WIB
+# Ghost-OS
+
+
+
+## 📋 Overview
+
+This repository contains **8 files** and is built with the following technologies:
+
+HTML
+
+## 🚀 Quick Start
+
+## ✨ Features
+
+- 📝 Auto-generated documentation
+
+## 🛠️ Technologies
+
+HTML
+
+## 📄 License
+
+MIT License
+
+---
+*Last updated: 2026-08-25 22:37:41 WIB*
